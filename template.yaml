@@ -2,6 +2,12 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Description: S3 Uploader - sample application
 
+Parameters:
+  S3BucketTestParam:
+    Type: String
+    Default: "arn:aws:s3:::redirect-test-bucket-111383751152"
+    Description: "Trying to use existing bucket - arn"
+
 Resources:
   # HTTP API
   MyApi:
@@ -32,10 +38,10 @@ Resources:
       MemorySize: 128
       Environment:
         Variables:
-          UploadBucket: !Ref S3UploadBucket  
+          UploadBucket: !Ref S3BucketTestParam
       Policies:
         - S3WritePolicy:
-            BucketName: !Ref S3UploadBucket
+            BucketName: !Ref S3BucketTestParam
         ## This permission allows the Lambda function to request signed URLs
         ## for objects that will be publicly readable. Uncomment if you want this ACL.
         # - Statement:
@@ -73,5 +79,5 @@ Outputs:
     Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com"
   S3UploadBucketName:
     Description: "S3 bucket for application uploads"
-    Value: !Ref 'S3UploadBucket'    
+    Value: !Ref 'S3BucketTestParam'    
 
